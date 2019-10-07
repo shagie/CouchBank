@@ -1,0 +1,10 @@
+{
+  "_id": "_design/summary",
+  "views": {
+    "balance": {
+      "map": "function (doc) { emit(doc.accountId, doc.amount) }",
+      "reduce": "_sum"
+    }
+  },
+  "language": "javascript"
+}

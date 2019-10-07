@@ -1,0 +1,32 @@
+version: '3.6'
+services:
+  couchdb:
+    image: couchdb:2.3
+    restart: always
+    volumes:
+      - type: volume
+        source: couchdb-bank
+        target: /opt/couchdb/data
+    ports:
+      - target: 5984
+        published: 5984
+        protocol: tcp
+        mode: host
+    networks:
+      - app-init
+
+  dbinit:
+    build: ./Init
+    depends_on:
+      - couchdb
+    command: sh -c './wait-for.sh couchdb:5984 -- ./init.sh'
+    restart: "no"
+    networks:
+      - app-init
+
+networks:
+  app-init:
+
+volumes:
+  couchdb-bank:
+
